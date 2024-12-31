@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediksi Tingkat Obesitas</title>
+    <link rel="stylesheet" href="form-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Prediksi Tingkat Obesitas</h1>
+        </header>
+
+        <main>
+            <form id="obesityForm">
+                <label for="usia">Usia:</label>
+                <input type="number" id="usia" name="usia" required>
+
+                <label for="jenis_kelamin">Jenis Kelamin:</label>
+                <select id="jenis_kelamin" name="jenis_kelamin" required>
+                    <option value="laki-laki">Laki-laki</option>
+                    <option value="perempuan">Perempuan</option>
+                </select>
+
+                <label for="tinggi_badan">Tinggi Badan (cm):</label>
+                <input type="number" id="tinggi_badan" name="tinggi_badan" required>
+
+                <label for="berat_badan">Berat Badan (kg):</label>
+                <input type="number" id="berat_badan" name="berat_badan" required>
+
+                <label for="konsumsi_kalori">Konsumsi Makanan Tinggi Kalori (skala 1-5):</label>
+                <input type="number" id="konsumsi_kalori" name="konsumsi_kalori" min="1" max="5" required>
+
+                <label for="riwayat_keluarga">Riwayat Keluarga dengan Kegemukan:</label>
+                <select id="riwayat_keluarga" name="riwayat_keluarga" required>
+                    <option value="ya">Ya</option>
+                    <option value="tidak">Tidak</option>
+                </select>
+
+                <label for="aktivitas_fisik">Frekuensi Aktivitas Fisik (jam per minggu):</label>
+                <input type="number" id="aktivitas_fisik" name="aktivitas_fisik" required>
+
+                <label for="waktu_teknologi">Waktu Menggunakan Perangkat Teknologi (jam per hari):</label>
+                <input type="number" id="waktu_teknologi" name="waktu_teknologi" required>
+
+                <label for="makanan_selingan">Konsumsi Makanan Diantara Waktu Makan (skala 1-5):</label>
+                <input type="number" id="makanan_selingan" name="makanan_selingan" min="1" max="5" required>
+
+                <button type="submit">Prediksi</button>
+            </form>
+
+            <div id="result"></div>
+        </main>
+    </div>
+
+    <script>
+        document.getElementById('obesityForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Ambil data dari form
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+
+            // Kirim data ke Google Colab API melalui fetch
+            fetch('https://your-ngrok-url/api/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                document.getElementById('result').innerHTML = `<h3>Prediksi Tingkat Obesitas: ${result.prediction}</h3>`;
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = `<p>Terjadi kesalahan. Silakan coba lagi.</p>`;
+            });
+        });
+    </script>
+</body>
+</html>
